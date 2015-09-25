@@ -58,10 +58,17 @@ class MBInfoPInfo {
     }
 
 
+    function get_record($uniprot) {
+        global $wpdb;
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE uniprot = '%s'", $uniprot));
+    }
+
+
     /**
      * Insert GCS meta data into database, if not already exist.
      * @param array $items
      * @return number of data
+     * @throws Exception
      */
     protected function insert_data($items) {
         global $wpdb;
@@ -69,23 +76,24 @@ class MBInfoPInfo {
         $family = '';
         $summary = '';
         foreach($items as $line) {
-            $record = str_getcsv($line);
+            $record = str_getcsv($line, ",", '"');
             if (count($record) != 6) {
                 throw new Exception('invalid record at row ' . ($cnt + 2) . ': ' . $line);
             }
-            if (empty($item['uniprot'])) {
-                throw new Exception('no uniprot at row ' . ($cnt + 2));
+            if (empty($record[3])) {
+                throw new Exception('no uniprot at row ' . ($cnt + 2) . ' ' . $record[3]);
             }
-            $family = empty($item['protein']) ? $family : $item['protein'];
-            $summary = empty($item['summary']) ? $summary : $item['summary'];
+            $family = empty($record[0]) ? $family : $record[0];
+            $summary = empty($record[1]) ? $summary : $record[1];
             $id = $wpdb->insert(
                 $this->table_name,
                 [
-                    'uniprot' => $item['uniprot'],
-                    'protein' => $family,
+                    'family' => $family,
                     'summary' => $summary,
-                    'pdb' => $item['pdb'],
-                    'gene' => $item['gene']
+                    'protein' => $record[2],
+                    'uniprot' => $record[3],
+                    'pdb' => $record[4],
+                    'gene' => $record[5]
                 ]
             );
             if ($id != false) {
@@ -127,7 +135,7 @@ class MBInfoPInfo {
         if ($csv === false) {
             throw new Exception('Fail to read ' . $url);
         }
-        $lines = str_getcsv($csv, "\n");
+        $lines = str_getcsv($csv, "\r");
         array_shift($lines); // remove header row
         $cnt = $this->insert_data($lines);
         return $cnt;

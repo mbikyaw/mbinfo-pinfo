@@ -32,22 +32,47 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 	}
 
 	/**
+	 * Prints figure statistic.
+	 *
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp mbinfo-pinfo info P25054
+	 *
+	 * @synopsis
+	 */
+	function info( $args, $assoc_args ) {
+		$pinfo = new MBInfoPInfo();
+		$uniprot = $args[0];
+		if (empty($uniprot)) {
+			WP_CLI::error( "UniProt require!" );
+		} else {
+			$r = $pinfo->get_record($uniprot);
+			var_dump($r);
+			WP_CLI::success( "Done!" );
+		}
+	}
+
+	/**
 	 * Load images files meta data to wordpress.
 	 *
 	 * ## OPTIONS
 	 *
-	 * <create>
-	 * : Create a new figure page if not exists.
+	 * <clean>
+	 * : Clear all previous record.
 	 *
 	 * ## EXAMPLES
 	 *
 	 *     wp mbinfo-pinfo load
 	 *
-	 * @synopsis [--create]
+	 * @synopsis [--clean]
 	 */
 	function load( $args, $assoc_args ) {
 		$pinfo = new MBInfoPInfo();
-		$fn1 = 'pinfo/p1.csv';
+		if (isset($assoc_args['clean'])) {
+			$pinfo->clear_data();
+		}
+		$fn1 = 'pinfo/p2.csv';
 		WP_CLI::line("Loading $fn1");
 		$cnt = $pinfo->insert_from_gcs($fn1);
 		WP_CLI::line("$cnt loaded from $fn1");
@@ -73,7 +98,9 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 	 * @synopsis [--dry-run] [--purge-all]
 	 */
 	function clean( $args, $assoc_args ) {
-
+		$pinfo = new MBInfoPInfo();
+		$pinfo->clear_data();
+		WP_CLI::success( "Done!" );
 	}
 
 }
