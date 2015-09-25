@@ -9,7 +9,7 @@
 
 
 global $mbinfo_pinfo_db_version;
-$mbinfo_pinfo_db_version = '1.0';
+$mbinfo_pinfo_db_version = '1.1';
 
 
 class MBInfoPInfo {
@@ -35,6 +35,7 @@ class MBInfoPInfo {
         $sql = "CREATE TABLE $this->table_name (
           uniprot varchar(14) NOT NULL,
           protein tinytext NOT NULL,
+          family tinytext DEFAULT '',
           summary text DEFAULT '',
           pdb varchar(14) DEFAULT '',
           gene mediumint(14) DEFAULT 0,
@@ -62,22 +63,26 @@ class MBInfoPInfo {
      * @param array $items
      * @return number of data
      */
-    function insert_data($items) {
+    protected function insert_data($items) {
         global $wpdb;
         $cnt = 0;
-        $protein = '';
+        $family = '';
         $summary = '';
-        foreach($items as $item) {
-            if (empty($item['uniprot'])) {
-                throw new Exception('no uniprot at ' . ($cnt + 2));
+        foreach($items as $line) {
+            $record = str_getcsv($line);
+            if (count($record) != 6) {
+                throw new Exception('invalid record at row ' . ($cnt + 2) . ': ' . $line);
             }
-            $protein = empty($item['protein']) ? $protein : $item['protein'];
+            if (empty($item['uniprot'])) {
+                throw new Exception('no uniprot at row ' . ($cnt + 2));
+            }
+            $family = empty($item['protein']) ? $family : $item['protein'];
             $summary = empty($item['summary']) ? $summary : $item['summary'];
             $id = $wpdb->insert(
                 $this->table_name,
                 [
                     'uniprot' => $item['uniprot'],
-                    'protein' => $protein,
+                    'protein' => $family,
                     'summary' => $summary,
                     'pdb' => $item['pdb'],
                     'gene' => $item['gene']
@@ -113,13 +118,16 @@ class MBInfoPInfo {
 
     /**
      * Insert figure page from GCS object.
-     * @param $fn object key of the csv file.
+     * @param $fn string key of the csv file.
      * @return number return number of record inserted.
      */
     public function insert_from_gcs($fn) {
-        $url = 'gs://' . self::$BUCKET . '/' . $fn;
+        $url = 'https://' . self::$BUCKET . '.storage.googleapis.com/' . $fn;
         $csv = self::get_remote_data($url);
-        $lines = str_getcsv($csv);
+        if ($csv === false) {
+            throw new Exception('Fail to read ' . $url);
+        }
+        $lines = str_getcsv($csv, "\n");
         array_shift($lines); // remove header row
         $cnt = $this->insert_data($lines);
         return $cnt;

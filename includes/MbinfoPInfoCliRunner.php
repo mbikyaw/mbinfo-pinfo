@@ -28,6 +28,7 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 		$ans   = $pinfo->get_info();
 		$cnt   = $ans['count'];
 		WP_CLI::line( "$cnt protein records" );
+		WP_CLI::success( "Done!" );
 	}
 
 	/**
@@ -45,8 +46,12 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 	 * @synopsis [--create]
 	 */
 	function load( $args, $assoc_args ) {
-
-
+		$pinfo = new MBInfoPInfo();
+		$fn1 = 'pinfo/p1.csv';
+		WP_CLI::line("Loading $fn1");
+		$cnt = $pinfo->insert_from_gcs($fn1);
+		WP_CLI::line("$cnt loaded from $fn1");
+		WP_CLI::success( "Done!" );
 	}
 
 
