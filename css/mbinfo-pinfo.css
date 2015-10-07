@@ -1,0 +1,49 @@
+.widget_pinfo .protein-list LI {
+    display: inline-block;
+    max-width: 8em;
+    text-overflow: ellipsis;
+    padding-right: 8px;
+}
+
+.widget_pinfo .protein-box A {
+    display:inline-block;
+    height:20px;
+    width:20px;
+    background-size:cover;
+    margin: 4px;
+}
+
+.widget_pinfo .summary {
+    font-size: 90%;
+    line-height: normal;
+}
+
+.widget_pinfo .protein-box A.quickgo {
+    background-image:url('/wp-content/uploads/2015/05/GO1.png');
+}
+
+.widget_pinfo .protein-box A.pfam {
+    background-image:url('/wp-content/uploads/2015/05/PDB1.png');
+}
+
+.widget_pinfo .protein-box A.uniprot {
+    background-image:url('/wp-content/uploads/2015/05/UP1.png');
+}
+
+.widget_pinfo .protein-box A.ncbi-gene {
+    background-image:url('/wp-content/uploads/2015/05/NG1.png');
+}
+
+.widget_pinfo .protein-box A.ncbi-protein {
+    background-image:url('/wp-content/uploads/2015/05/NP1.png');
+}
+
+.widget_pinfo .protein-box A.pdb {
+    background-image:url('/wp-content/uploads/2015/05/PDB1.png');
+}
+
+.widget_pinfo .protein-box A.homologene {
+    background-image:url('/wp-content/uploads/2015/05/HG1.png');
+}
+
+

@@ -26,7 +26,9 @@ Setup your WP plugin test system by running
 
     bash bin/install-wp-test.sh
     
-Edit `WP_TESTS_DIR` path in tests/bootstrap.php, where is your phpunit installation folder.    
+Edit `WP_TESTS_DIR` path in tests/bootstrap.php, where is your phpunit installation folder. 
+   
+Load data before running the test, `wp mbinfo-pinfo load`.    
 
 In the plugin folder, run `phpunit` unit test runner.    
     

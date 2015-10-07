@@ -69,26 +69,25 @@ class MBInfoPInfo {
 
     /**
      * @return array
-     * @protected
      */
     function list_protein() {
         global $wpdb;
-        return $wpdb->get_results("SELECT uniprot, protein, family FROM $this->table_name", ARRAY_A);
+        return $wpdb->get_results("SELECT * FROM $this->table_name", ARRAY_A);
     }
 
     function search_proteins($content) {
         $proteins = $this->list_protein();
         $list = [];
         foreach ($proteins as $protein) {
-            $match = null;
-            if (!isset($protein->protein) || empty($protein->protein)) {
+            $p = $protein['protein'];
+            if (empty($p)) {
                 continue;
             }
-            $pattern = "/$protein->protein/i";
-            if (preg_match($pattern, $content)) {
-                array_push($list, $protein->uniprot);
+            if (mb_stripos($content, $p)) {
+                array_push($list, $protein);
             }
         }
+        return $list;
     }
 
 
@@ -98,7 +97,7 @@ class MBInfoPInfo {
      * @return number of data
      * @throws Exception
      */
-    protected function insert_data($items) {
+    function insert_data($items) {
         global $wpdb;
         $cnt = 0;
         $family = '';
@@ -148,10 +147,6 @@ class MBInfoPInfo {
         $data   = curl_exec( $c );
         curl_close( $c );
         return $data;
-    }
-
-    public function collect_protein($id) {
-
     }
 
     /**

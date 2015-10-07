@@ -32,7 +32,7 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 	}
 
 	/**
-	 * Prints figure statistic.
+	 * Print protein info.
 	 *
 	 * ## OPTIONS
 	 *
@@ -60,6 +60,37 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 		} else {
 			$r = $pinfo->get_record($uniprot);
 			var_dump($r);
+		}
+	}
+
+
+	/**
+	 * Analyze a page.
+	 *
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp mbinfo-pinfo analyze 1
+	 *
+	 * @synopsis
+	 */
+	function analyze( $args, $assoc_args ) {
+		$pinfo = new MBInfoPInfo();
+		$pid = $args[0];
+		if (empty($pid)) {
+			WP_CLI::error( "page id required" );
+		} else {
+			global $wpdb;
+			$content = $wpdb->get_var($wpdb->prepare("SELECT post_content FROM $wpdb->posts WHERE ID = %s", $pid));
+			if (!$content) {
+				WP_CLI::success( "Page $pid not found." );
+			} else {
+				$proteins = $pinfo->search_proteins($content);
+				var_dump($proteins);
+				$cnt = count($proteins);
+				WP_CLI::line( "$cnt proteins found" );
+				WP_CLI::success( "Done!" );
+			}
 		}
 	}
 
