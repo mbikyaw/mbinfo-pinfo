@@ -3,7 +3,7 @@
  * Plugin Name: Protein Info
  * Plugin URI: https://github.com/mbikyaw/mbinfo-pinfo
  * Description: Display protein widget.
- * Version: 1.1
+ * Version: 1.2
  * Author: Kyaw Tun
  * Author URI: https://github.com/mbikyaw/
  * License: MIT
@@ -33,7 +33,7 @@ function mbinfo_pinfo_install() {
 function mbinfo_pinfo_enqueue_scripts() {
 	$css_url = plugins_url( 'css/mbinfo-pinfo.css', __FILE__ );
 	$js_url = plugins_url( 'js/mbinfo-pinfo.js', __FILE__ );
-	wp_enqueue_style( 'mbinfo-pinfo-css', $css_url, false, '1.0.0', 'screen' );
+	wp_enqueue_style( 'mbinfo-pinfo-css', $css_url, false, '0.2.0', 'screen' );
 	wp_enqueue_script( 'mbinfo-pinfo-js', $js_url, false, '0.1.0', 'screen' );
 }
 

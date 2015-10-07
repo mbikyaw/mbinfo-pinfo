@@ -80,11 +80,18 @@ class MBInfoPInfo {
         $list = [];
         foreach ($proteins as $protein) {
             $p = $protein['protein'];
-            if (empty($p)) {
-                continue;
+            if (!empty($p)) {
+                if (mb_stripos($content, ' ' . $p)) {
+                    array_push($list, $protein);
+                    continue;
+                }
             }
-            if (mb_stripos($content, $p)) {
-                array_push($list, $protein);
+            $family = $protein['family'];
+            if (false && !empty($family)) {
+                if (mb_stripos($content, $family)) {
+                    array_push($list, $protein);
+                    continue;
+                }
             }
         }
         return $list;

@@ -10,13 +10,13 @@ jQuery(function() {
         root.innerHTML = '<h5></h5>' +
             '<div class="summary"></div>' +
             '<div>' +
-            '<a class="uniprot"></a>' +
-            '<a class="quickgo"></a>' +
-            '<a class="pfam"></a>' +
-            '<a class="pdb"></a>' +
-            '<a class="ncbi-protein"></a>' +
-            '<a class="ncbi-gene"></a>' +
-            '<a class="homologene"></a>' +
+            '<a class="uniprot" target="uniprot"></a>' +
+            '<a class="quickgo" target="quickgo"></a>' +
+            '<a class="pfam" target="pfam"></a>' +
+            '<a class="pdb" target="pdb"></a>' +
+            '<a class="ncbi-protein" target="ncbi"></a>' +
+            '<a class="ncbi-gene" target="ncbi"></a>' +
+            '<a class="homologene" target="ncbi"></a>' +
             '</div>';
 
         root.querySelector('h5').textContent = p.protein;
