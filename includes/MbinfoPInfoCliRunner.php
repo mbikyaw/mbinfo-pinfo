@@ -34,10 +34,18 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 	/**
 	 * Prints figure statistic.
 	 *
+	 * ## OPTIONS
+	 *
+	 * [<limit>]
+	 * : max number of protien to show, default to 5.
+	 *
+	 * [<offset>]
+	 * : offset, default to 0.
 	 *
 	 * ## EXAMPLES
 	 *
 	 *     wp mbinfo-pinfo info P25054
+	 *     wp mbinfo-pinfo info --offset=10
 	 *
 	 * @synopsis
 	 */
@@ -45,11 +53,13 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 		$pinfo = new MBInfoPInfo();
 		$uniprot = $args[0];
 		if (empty($uniprot)) {
-			WP_CLI::error( "UniProt require!" );
+			$limit = isset($assoc_args['limit']) ? intval($assoc_args['limit']) : 5;
+			$offset = isset($assoc_args['offset']) ? intval($assoc_args['offset']) : 0;
+			$arr = $pinfo->list_record($limit, $offset);
+			var_dump($arr);
 		} else {
 			$r = $pinfo->get_record($uniprot);
 			var_dump($r);
-			WP_CLI::success( "Done!" );
 		}
 	}
 

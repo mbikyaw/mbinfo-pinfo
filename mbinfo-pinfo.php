@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: MBInfo Figure
+ * Plugin Name: Protein Info
  * Plugin URI: http://example.com/wordpress-plugins/my-plugin
- * Description: Create a figure content box in the text.
+ * Description: Display protein widget.
  * Version: 1.1
  * Author: Kyaw Tun
  * Author URI: http://mbinfo.mbi.nus.edu.sg
@@ -11,6 +11,7 @@
 
 
 require_once 'includes/pinfo.php';
+require_once 'includes/PInfoWidget.php';
 
 
 register_activation_hook( __FILE__, 'mbinfo_pinfo_install' );
@@ -26,7 +27,6 @@ function mbinfo_pinfo_install() {
 		$pinfo = new MBInfoPInfo();
 		$pinfo->update_to_v11();
 	}
-
 }
 
 

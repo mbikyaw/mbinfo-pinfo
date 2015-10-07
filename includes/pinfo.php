@@ -57,10 +57,38 @@ class MBInfoPInfo {
         return ['count' => $count];
     }
 
-
     function get_record($uniprot) {
         global $wpdb;
         return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE uniprot = '%s'", $uniprot));
+    }
+
+    function list_record($limit, $offset) {
+        global $wpdb;
+        return $wpdb->get_results($wpdb->prepare("SELECT * FROM $this->table_name LIMIT %d OFFSET %d", $limit, $offset), ARRAY_A);
+    }
+
+    /**
+     * @return array
+     * @protected
+     */
+    function list_protein() {
+        global $wpdb;
+        return $wpdb->get_results("SELECT uniprot, protein, family FROM $this->table_name", ARRAY_A);
+    }
+
+    function search_proteins($content) {
+        $proteins = $this->list_protein();
+        $list = [];
+        foreach ($proteins as $protein) {
+            $match = null;
+            if (!isset($protein->protein) || empty($protein->protein)) {
+                continue;
+            }
+            $pattern = "/$protein->protein/i";
+            if (preg_match($pattern, $content)) {
+                array_push($list, $protein->uniprot);
+            }
+        }
     }
 
 
@@ -122,7 +150,9 @@ class MBInfoPInfo {
         return $data;
     }
 
+    public function collect_protein($id) {
 
+    }
 
     /**
      * Insert figure page from GCS object.
