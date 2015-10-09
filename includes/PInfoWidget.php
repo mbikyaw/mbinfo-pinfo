@@ -32,7 +32,7 @@ class PInfoWidget extends WP_Widget {
 		echo '<div class="protein-box" style="display: none;"></div>';
 		echo '<ul class="protein-list">';
 		foreach ($list as $p) {
-			echo '<li><a href="/protein/' . $p['uniprot'] . '/">' . $p["protein"] . '</a></li>';
+			echo '<li><a href="/uniprot/' . $p['uniprot'] . '/">' . $p["protein"] . '</a></li>';
 		}
 		$json = json_encode($list);
 		echo '<script>PInfoProtein = ' . $json . ';</script>';

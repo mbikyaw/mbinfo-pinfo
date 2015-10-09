@@ -75,7 +75,7 @@ class MBInfoPInfo {
         return $wpdb->get_results("SELECT * FROM $this->table_name", ARRAY_A);
     }
 
-    function search_proteins($content) {
+    private function search_proteins_by_name($content) {
         $proteins = $this->list_protein();
         $list = [];
         foreach ($proteins as $protein) {
@@ -89,6 +89,33 @@ class MBInfoPInfo {
             $family = $protein['family'];
             if (false && !empty($family)) {
                 if (mb_stripos($content, $family)) {
+                    array_push($list, $protein);
+                    continue;
+                }
+            }
+        }
+        return $list;
+    }
+
+    function search_proteins($content) {
+        $proteins = $this->list_protein();
+        $list = [];
+        foreach ($proteins as $protein) {
+            $uniprot = $protein['uniprot'];
+            if (mb_stripos($content, 'uniprot="' . $uniprot . '"')) {
+                array_push($list, $protein);
+                continue;
+            }
+            $p = $protein['protein'];
+            if (!empty($p)) {
+                if (mb_stripos($content, 'protein="' . $p . '"')) {
+                    array_push($list, $protein);
+                    continue;
+                }
+            }
+            $f = $protein['family'];
+            if (!empty($f)) {
+                if (mb_stripos($content, 'family="' . $f . '"')) {
                     array_push($list, $protein);
                     continue;
                 }

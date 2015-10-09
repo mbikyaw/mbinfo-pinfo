@@ -76,9 +76,75 @@ jQuery(function() {
         }
     };
 
-    jQuery('.widget_pinfo UL.protein-list').on('click', 'A', function(ev) {
+    var dispByName = function(protein) {
+        protein = protein.toLowerCase();
+        for (var i = 0; i < PInfoProtein.length; i++) {
+            var p = PInfoProtein[i];
+            if (!!p.protein && p.protein.toLowerCase() == protein) {
+                dispProtein(p);
+                return;
+            }
+        }
+    };
+
+    var dispByFamily = function(family) {
+        family = family.toLowerCase();
+        for (var i = 0; i < PInfoProtein.length; i++) {
+            var p = PInfoProtein[i];
+            if (!!p.family && p.family.toLowerCase() == family) {
+                dispProtein(p);
+                return;
+            }
+        }
+    };
+
+    var handleUniProtClick = function(ev) {
         ev.preventDefault();
         var href = ev.target.getAttribute('href');
         dispUniprot(href.substring(9, href.length - 1));
-    })
+    };
+
+    var handleProteinClick = function(ev) {
+        ev.preventDefault();
+        var href = ev.target.getAttribute('href');
+        dispByName(href.substring(9, href.length - 1));
+    };
+
+    var handleFamilyClick = function(ev) {
+        ev.preventDefault();
+        var href = ev.target.getAttribute('href');
+        dispByFamily(href.substring(8, href.length - 1));
+    };
+
+    var ups = document.querySelectorAll('A[uniprot]');
+    for (var i = 0; i < ups.length; i++) {
+        var a = ups[i];
+        var uniprot = a.getAttribute('uniprot');
+        a.href = '/uniprot/' + uniprot + '/';
+        a.onclick = handleUniProtClick;
+    }
+
+    var proteins = document.querySelectorAll('A[protein]');
+    for (var i = 0; i < proteins.length; i++) {
+        var a = proteins[i];
+        if (a.hasAttribute('href')) {
+            continue;
+        }
+        var protein = a.getAttribute('protein');
+        a.href = '/protein/' + protein + '/';
+        a.onclick = handleProteinClick;
+    }
+
+    var familys = document.querySelectorAll('A[family]');
+    for (var i = 0; i < familys.length; i++) {
+        var a = familys[i];
+        if (a.hasAttribute('href')) {
+            continue;
+        }
+        var family = a.getAttribute('family');
+        a.href = '/family/' + family + '/';
+        a.onclick = handleFamilyClick;
+    }
+
+    jQuery('.widget_pinfo UL.protein-list').on('click', 'A', handleUniProtClick)
 });
