@@ -5,10 +5,14 @@
 jQuery(function() {
 
     var dispProtein = function(p) {
+        if (!p) {
+            return;
+        }
         var root = document.querySelector('.widget_pinfo .protein-box');
         var ul = document.querySelector('.widget_pinfo UL.protein-list');
         root.innerHTML = '<h5></h5>' +
             '<div class="summary"></div>' +
+            '<p>More Links</p>' +
             '<div>' +
             '<a class="uniprot" target="uniprot"></a>' +
             '<a class="quickgo" target="quickgo"></a>' +
@@ -66,36 +70,65 @@ jQuery(function() {
         root.style.display = '';
     };
 
-    var dispUniprot = function(uniprot) {
-        for (var i = 0; i < PInfoProtein.length; i++) {
-            var p = PInfoProtein[i];
-            if (p.uniprot == uniprot) {
-                dispProtein(p);
-                return;
-            }
-        }
-    };
-
-    var dispByName = function(protein) {
+    var findByProtein = function(protein) {
         protein = protein.toLowerCase();
         for (var i = 0; i < PInfoProtein.length; i++) {
             var p = PInfoProtein[i];
             if (!!p.protein && p.protein.toLowerCase() == protein) {
-                dispProtein(p);
-                return;
+                return p;
             }
         }
     };
 
-    var dispByFamily = function(family) {
+    var findUniprot = function(uniprot) {
+        for (var i = 0; i < PInfoProtein.length; i++) {
+            var p = PInfoProtein[i];
+            if (p.uniprot == uniprot) {
+                return p;
+            }
+        }
+    };
+
+    var findByFamily = function(family) {
         family = family.toLowerCase();
         for (var i = 0; i < PInfoProtein.length; i++) {
             var p = PInfoProtein[i];
             if (!!p.family && p.family.toLowerCase() == family) {
-                dispProtein(p);
-                return;
+                return p;
             }
         }
+    };
+
+    var dispUniprot = function(uniprot) {
+        var p = findUniprot(uniprot);
+        if (p) {
+            dispProtein(p);
+        } else {
+            alert('UniProt ID "' + (uniprot || '') + '" not found.');
+        }
+    };
+
+    var dispByName = function(protein) {
+        var p = findByProtein(protein);
+        if (p) {
+            dispProtein(p);
+        } else {
+            alert('Protein name "' + (protein || '') + '" not found.');
+        }
+    };
+
+    var dispByFamily = function(family) {
+        var p = findByFamily(family);
+        if (p) {
+            dispProtein(p);
+        } else {
+            alert('Protein family "' + (family || '') + '" not found.');
+        }
+    };
+
+
+    var handleSelectionChanged = function(ev) {
+        dispUniprot(ev.currentTarget.value);
     };
 
     var handleUniProtClick = function(ev) {
@@ -122,6 +155,10 @@ jQuery(function() {
         var uniprot = a.getAttribute('uniprot');
         a.href = '/uniprot/' + uniprot + '/';
         a.onclick = handleUniProtClick;
+        a.classList.add('protein');
+        if (!findUniprot(uniprot)) {
+            a.classList.add('not-found');
+        }
     }
 
     var proteins = document.querySelectorAll('A[protein]');
@@ -133,6 +170,10 @@ jQuery(function() {
         var protein = a.getAttribute('protein');
         a.href = '/protein/' + protein + '/';
         a.onclick = handleProteinClick;
+        a.classList.add('protein');
+        if (!findByProtein(protein)) {
+            a.classList.add('not-found');
+        }
     }
 
     var familys = document.querySelectorAll('A[family]');
@@ -144,7 +185,22 @@ jQuery(function() {
         var family = a.getAttribute('family');
         a.href = '/family/' + family + '/';
         a.onclick = handleFamilyClick;
+        a.classList.add('protein');
+        if (!findByFamily(family)) {
+            a.classList.add('not-found');
+        }
     }
 
-    jQuery('.widget_pinfo UL.protein-list').on('click', 'A', handleUniProtClick)
+    setTimeout(function() {
+        if (PInfoProtein[0]) {
+            dispProtein(PInfoProtein[0]);
+        }
+    }, 200);
+
+
+    jQuery('.DefaultSidebar').stick_in_parent();
+
+    var sel = document.querySelector('.widget_pinfo SELECT.protein-list');
+    sel.onchange = handleSelectionChanged;
+
 });

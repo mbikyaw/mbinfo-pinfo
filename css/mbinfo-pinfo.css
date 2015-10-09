@@ -7,21 +7,22 @@
 
 .widget_pinfo .protein-box A {
     display:inline-block;
-    height:42px;
-    width:41px;
+    height:32px;
+    width:31px;
     background-size:cover;
-    margin: 8px;
+    margin: 8px 16px;
 }
 
 .widget_pinfo H5 {
     margin-bottom: 8px;
-    text-align: center;
 }
 
 
 .widget_pinfo .summary {
     line-height: 1.2;
     margin-bottom: 8px;
+    max-height: 6.7em;
+    overflow-y: scroll;
 }
 
 .widget_pinfo .protein-box A.quickgo {
@@ -29,7 +30,7 @@
 }
 
 .widget_pinfo .protein-box A.pfam {
-    background-image:url('/wp-content/uploads/2015/05/PDB1.png');
+    background-image:url('/wp-content/uploads/2015/06/PF1.png');
 }
 
 .widget_pinfo .protein-box A.uniprot {
@@ -52,4 +53,13 @@
     background-image:url('/wp-content/uploads/2015/05/HG1.png');
 }
 
+A.protein {
+    background-color: #f1ffc4;
+}
+
+
+A.protein.not-found {
+    background-color: #ff1d40;
+    color: white;
+}
 

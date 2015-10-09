@@ -25,18 +25,21 @@ class PInfoWidget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-		echo '<div class="widget widget_pinfo"><h4>Protein Info</h4>';
 		$content = get_the_content();
 		$pinfo = new MBInfoPInfo();
 		$list = $pinfo->search_proteins($content);
-		echo '<div class="protein-box" style="display: none;"></div>';
-		echo '<ul class="protein-list">';
+
+		echo '<div class="widget widget_pinfo"><h4>Protein Info</h4>';
+		echo '<div><select class="protein-list">';
 		foreach ($list as $p) {
-			echo '<li><a href="/uniprot/' . $p['uniprot'] . '/">' . $p["protein"] . '</a></li>';
+			echo '<option value="' . $p['uniprot'] . '"/>' . $p["protein"] . '</option>';
 		}
+		echo '</select></div>';
+		echo '<div class="protein-box" style="display: none;"></div>';
+
+		echo '</div>';
 		$json = json_encode($list);
 		echo '<script>PInfoProtein = ' . $json . ';</script>';
-		echo '</ul></div>';
 	}
 }
 
