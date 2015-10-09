@@ -191,16 +191,19 @@ jQuery(function() {
         }
     }
 
-    setTimeout(function() {
-        if (PInfoProtein[0]) {
-            dispProtein(PInfoProtein[0]);
-        }
-    }, 200);
-
-
     jQuery('.DefaultSidebar').stick_in_parent();
 
-    var sel = document.querySelector('.widget_pinfo SELECT.protein-list');
-    sel.onchange = handleSelectionChanged;
+    if (typeof PInfoProtein != 'undefined') {
+        var sel = document.querySelector('.widget_pinfo SELECT.protein-list');
+        sel.onchange = handleSelectionChanged;
+
+        setTimeout(function() {
+            if (PInfoProtein[0]) {
+                dispProtein(PInfoProtein[0]);
+            }
+        }, 200);
+    }
+
+
 
 });
