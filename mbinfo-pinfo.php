@@ -41,10 +41,10 @@ function mbinfo_pinfo_enqueue_scripts() {
 
 
 /**
- * Register a new shortcode: [protein name="Lar" uniprot="P123421" family="Actin"]
+ * Register a new shortcode: [pinfo name="Lar" uniprot="P123421" family="Actin"]
  */
-add_shortcode('protein', 'mbinfo_protein');
-function mbinfo_protein($attr, $content)
+add_shortcode('pinfo', 'mbinfo_pinfo');
+function mbinfo_pinfo($attr, $content)
 {
 	$pinfo = new MBInfoPInfo();
 	return $pinfo->parse_short_code($attr, $content);

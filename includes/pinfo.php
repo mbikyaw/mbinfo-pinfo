@@ -38,11 +38,11 @@ class MBInfoPInfo {
         if (isset($attr['uniprot'])) {
             $s = 'uniprot="' . $attr['uniprot'] . '"';
         }
-        if (isset($attr['name'])) {
+        if (isset($attr['protein'])) {
             if ($s) {
                 $s .= ' ';
             }
-            $s = 'protein="' . $attr['name'] . '"';
+            $s = 'protein="' . $attr['protein'] . '"';
         }
         if (isset($attr['family'])) {
             if ($s) {
