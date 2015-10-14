@@ -43,6 +43,9 @@ class MBInfoPInfo {
                 $s .= ' ';
             }
             $s = 'protein="' . $attr['protein'] . '"';
+            if (empty($content)) {
+                $content = $attr['protein'];
+            }
         }
         if (isset($attr['family'])) {
             if ($s) {
