@@ -40,6 +40,17 @@ function mbinfo_pinfo_enqueue_scripts() {
 }
 
 
+/**
+ * Register a new shortcode: [protein name="Lar" uniprot="P123421" family="Actin"]
+ */
+add_shortcode('protein', 'mbinfo_protein');
+function mbinfo_protein($attr, $content)
+{
+	$pinfo = new MBInfoPInfo();
+	return $pinfo->parse_short_code($attr, $content);
+}
+
+
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	include __DIR__ . '/includes/MbinfoPInfoCliRunner.php';
 }

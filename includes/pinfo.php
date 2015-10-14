@@ -27,6 +27,32 @@ class MBInfoPInfo {
     }
 
 
+    /**
+     * Parse short code.
+     * @param $attr
+     * @param string $content
+     * @return string
+     */
+    public function parse_short_code($attr, $content) {
+        $s = '';
+        if (isset($attr['uniprot'])) {
+            $s = 'uniprot="' . $attr['uniprot'] . '"';
+        }
+        if (isset($attr['name'])) {
+            if ($s) {
+                $s .= ' ';
+            }
+            $s = 'protein="' . $attr['name'] . '"';
+        }
+        if (isset($attr['family'])) {
+            if ($s) {
+                $s .= ' ';
+            }
+            $s = 'family="' . $attr['family'] . '"';
+        }
+        return '<a ' . $s . '>' . $content . '</a>';
+    }
+
     function update_to_v11() {
         global $wpdb;
 
@@ -57,9 +83,9 @@ class MBInfoPInfo {
         return ['count' => $count];
     }
 
-    function get_record($uniprot) {
+    function get_record($uniprot, $field = 'uniport') {
         global $wpdb;
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE uniprot = '%s'", $uniprot));
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE $s = '%s'", $field, $uniprot));
     }
 
     function list_record($limit, $offset) {
