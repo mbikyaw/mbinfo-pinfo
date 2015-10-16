@@ -13,6 +13,14 @@
     margin: 8px 16px;
 }
 
+.protein-list A.link {
+    display:inline-block;
+    height:24px;
+    width:23px;
+    background-size:cover;
+    margin: 2px;
+}
+
 .widget_pinfo H5 {
     margin-bottom: 8px;
 }
@@ -25,31 +33,31 @@
     overflow-y: scroll;
 }
 
-.widget_pinfo .protein-box A.quickgo {
+A.quickgo {
     background-image:url('/wp-content/uploads/2015/05/GO1.png');
 }
 
-.widget_pinfo .protein-box A.pfam {
+A.pfam {
     background-image:url('/wp-content/uploads/2015/06/PF1.png');
 }
 
-.widget_pinfo .protein-box A.uniprot {
+A.uniprot {
     background-image:url('/wp-content/uploads/2015/05/UP1.png');
 }
 
-.widget_pinfo .protein-box A.ncbi-gene {
+A.ncbi-gene {
     background-image:url('/wp-content/uploads/2015/05/NG1.png');
 }
 
-.widget_pinfo .protein-box A.ncbi-protein {
+A.ncbi-protein {
     background-image:url('/wp-content/uploads/2015/05/NP1.png');
 }
 
-.widget_pinfo .protein-box A.pdb {
+A.pdb {
     background-image:url('/wp-content/uploads/2015/05/PDB1.png');
 }
 
-.widget_pinfo .protein-box A.homologene {
+A.homologene {
     background-image:url('/wp-content/uploads/2015/05/HG1.png');
 }
 
@@ -64,3 +72,13 @@ A.protein.not-found {
     color: white;
 }
 
+
+.protein-list-links {
+    width: 120px;
+}
+
+.protein-list-summary {
+    max-height: 100px;
+    overflow-y: auto;
+    display: inline-block;
+}

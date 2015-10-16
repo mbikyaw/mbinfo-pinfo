@@ -88,7 +88,7 @@ class MBInfoPInfo {
 
     function get_record($uniprot, $field = 'uniport') {
         global $wpdb;
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE $s = '%s'", $field, $uniprot));
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE %s = '%s'", $field, $uniprot));
     }
 
     function list_record($limit, $offset) {
