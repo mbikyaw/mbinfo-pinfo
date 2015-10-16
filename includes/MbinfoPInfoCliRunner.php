@@ -16,18 +16,37 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 	/**
 	 * Prints figure statistic.
 	 *
+	 * ## OPTIONS
+	 *
+	 * [<uniprot>]
+	 * : uniprot to analyze.
 	 *
 	 * ## EXAMPLES
 	 *
 	 *     wp mbinfo-pinfo statistic
+	 *     wp mbinfo-pinfo statistic B0I1T2
 	 *
-	 * @synopsis
+	 * @synopsis [<uniprot>]
 	 */
 	function statistic( $args, $assoc_args ) {
 		$pinfo = new MBInfoPInfo();
-		$ans   = $pinfo->get_info();
-		$cnt   = $ans['count'];
-		WP_CLI::line( "$cnt protein records" );
+		$uniprot = $args[0];
+		if (!empty($uniprot)) {
+			$protein = $pinfo->get_record($uniprot);
+			if (empty($protein)) {
+				WP_CLI::success( $uniprot . " not found." );
+				return;
+			}
+			$list = $pinfo->search_referred_pages($protein);
+			var_dump($list);
+			$cnt = count($list);
+			WP_CLI::line( "$cnt page found for $uniprot" );
+		} else {
+			$ans   = $pinfo->get_info();
+			$cnt   = $ans['count'];
+			WP_CLI::line( "$cnt protein records" );
+		}
+
 		WP_CLI::success( "Done!" );
 	}
 

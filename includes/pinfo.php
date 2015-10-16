@@ -86,9 +86,10 @@ class MBInfoPInfo {
         return ['count' => $count];
     }
 
-    function get_record($uniprot, $field = 'uniport') {
+    function get_record($uniprot) {
         global $wpdb;
-        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE %s = '%s'", $field, $uniprot));
+        $sql = $wpdb->prepare("SELECT * FROM $this->table_name WHERE uniprot = '%s'", $uniprot);
+        return $wpdb->get_row($sql, ARRAY_A);
     }
 
     function list_record($limit, $offset) {
@@ -101,7 +102,7 @@ class MBInfoPInfo {
      */
     function list_protein() {
         global $wpdb;
-        return $wpdb->get_results("SELECT * FROM $this->table_name", ARRAY_A);
+        return $wpdb->get_results("SELECT * FROM $this->table_name ORDER BY protein", ARRAY_A);
     }
 
     private function search_proteins_by_name($content) {
@@ -124,6 +125,37 @@ class MBInfoPInfo {
             }
         }
         return $list;
+    }
+
+    function search_referred_pages($protein) {
+
+        $out = [];
+        if (empty($protein)) {
+            return $out;
+        }
+
+        $args = array(
+            'sort_order' => 'desc',
+            'sort_column' => 'post_modified',
+            'post_type' => 'page',
+            'post_status' => 'publish'
+        );
+        $pages = get_pages($args);
+        foreach ($pages as $page) {
+            if (mb_stripos($page->post_content, 'uniprot="' . $protein['uniprot'] . '"')) {
+                array_push($out, $page);
+                continue;
+            }
+            if (mb_stripos($page->post_content, 'protein="' . $protein['protein'] . '"')) {
+                array_push($out, $page);
+                continue;
+            }
+            if (mb_stripos($page->post_content, 'family="' . $protein['family'] . '"')) {
+                array_push($out, $page);
+                continue;
+            }
+        }
+        return $out;
     }
 
     function search_proteins($content) {
@@ -210,6 +242,39 @@ class MBInfoPInfo {
         $data   = curl_exec( $c );
         curl_close( $c );
         return $data;
+    }
+
+    function render_referred_pages($p) {
+        $pages = $this->search_referred_pages($p);
+        $out = '';
+        foreach ($pages as $page) {
+            if (!empty($out)) {
+                $out .= '<br/>';
+            }
+            $out .= '<a href="/?page_id=' . $page->ID . '">' . $page->post_title . '</a>';
+        }
+        return $out;
+    }
+
+    static function render_link($p) {
+        $pdb = '';
+        if ($p['pdb']) {
+            $pdb = '<a href="http://www.ebi.ac.uk/pdbe/entry/pdb/' . $p['pdb'] . '" class="protein-link pdb" target="pdb"></a>';
+        }
+        $gene = '';
+        $hgene = '';
+        if ($p['gene']) {
+            $gene = '<a href="http://www.ncbi.nlm.nih.gov/gene/?term=' . $p['gene'] . '" class="protein-link ncbi-gene" target="ncbi"></a>';
+            $hgene = '<a href="http://www.ncbi.nlm.nih.gov/homologene?LinkName=gene_homologene&from_uid=' . $p['gene'] . '" class="protein-link homologene" target="ncbi"></a>';
+        }
+
+        return '<a href="http://www.uniprot.org/uniprot/' . $p['uniprot'] . '" class="protein-link uniprot" target="uniprot"></a>' .
+            '<a href="http://www.ebi.ac.uk/QuickGO/GProtein?ac=' . $p['uniprot'] . '" class="protein-link quickgo" target="quickgo"></a>' .
+            '<a href="http://pfam.xfam.org/protein/' . $p['uniprot'] . '" class="protein-link pfam" target="pfam"></a>' .
+            '<a href="http://www.ncbi.nlm.nih.gov/protein/' . $p['uniprot'] . '" class="protein-link ncbi-protein" target="ncbi"></a>' .
+            $pdb .
+            $gene .
+            $hgene;
     }
 
     /**

@@ -13,7 +13,7 @@
     margin: 8px 16px;
 }
 
-.protein-list A.link {
+A.protein-link {
     display:inline-block;
     height:24px;
     width:23px;
@@ -82,3 +82,5 @@ A.protein.not-found {
     overflow-y: auto;
     display: inline-block;
 }
+
+
