@@ -191,6 +191,21 @@ jQuery(function() {
         }
     }
 
+    /**
+     * Organize protein into family
+     */
+    var processPInfoProtein = function() {
+        PInfoFamily = {};
+        for (var p in PInfoProtein) {
+            if (!PInfoFamily[p.family]) {
+                PInfoFamily[p.family] = [];
+            }
+            var family = PInfoFamily[p.family];
+            family.push(p);
+        }
+
+    };
+
     jQuery('.DefaultSidebar').stick_in_parent();
 
     if (typeof PInfoProtein != 'undefined') {
