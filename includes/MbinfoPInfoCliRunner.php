@@ -114,7 +114,9 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 	}
 
 	/**
-	 * Load images files meta data to wordpress.
+	 * Load protein information CSV file "pinfo/pinfo.csv" from GCS bucket "mbi-data".
+	 *
+	 * See file format in gs://mbi-data/pinfo/pinfo.csv
 	 *
 	 * ## OPTIONS
 	 *
@@ -132,7 +134,7 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 		if (isset($assoc_args['clean'])) {
 			$pinfo->clear_data();
 		}
-		$fn1 = 'pinfo/p2.csv';
+		$fn1 = 'pinfo/pinfo.csv';
 		WP_CLI::line("Loading $fn1");
 		$cnt = $pinfo->insert_from_gcs($fn1);
 		WP_CLI::line("$cnt loaded from $fn1");
@@ -141,15 +143,7 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 
 
 	/**
-	 * Clean figure pages.
-	 *
-	 * ## OPTIONS
-	 *
-	 * <dry-run>
-	 * : Dry run instead of actual deleting figure pages.
-	 *
-	 * <purge-all>
-	 * : Purge all figure pages.
+	 * Remove protein info records from the database.
 	 *
 	 * ## EXAMPLES
 	 *

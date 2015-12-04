@@ -25,7 +25,7 @@ function mbinfo_pinfo_install() {
 	if ( $existing != $mbinfo_pinfo_db_version ) {
 		error_log( 'MBInfoFigure: running mbinfo_pinfo_install ' . $existing . ' to ' . $mbinfo_pinfo_db_version );
 		$pinfo = new MBInfoPInfo();
-		$pinfo->update_to_v11();
+		$pinfo->update_to_v12();
 	}
 }
 

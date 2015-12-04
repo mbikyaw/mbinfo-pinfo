@@ -9,7 +9,7 @@
 
 
 global $mbinfo_pinfo_db_version;
-$mbinfo_pinfo_db_version = '1.1';
+$mbinfo_pinfo_db_version = '1.2';
 
 
 class MBInfoPInfo {
@@ -56,7 +56,7 @@ class MBInfoPInfo {
         return '<a ' . $s . '>' . $content . '</a>';
     }
 
-    function update_to_v11() {
+    function update_to_v12() {
         global $wpdb;
 
         $charset_collate = $wpdb->get_charset_collate();
@@ -65,6 +65,7 @@ class MBInfoPInfo {
           uniprot varchar(14) NOT NULL,
           protein tinytext NOT NULL,
           family tinytext DEFAULT '',
+          subfamily tinytext DEFAULT '',
           summary text DEFAULT '',
           pdb varchar(14) DEFAULT '',
           gene mediumint(14) DEFAULT 0,
@@ -196,26 +197,29 @@ class MBInfoPInfo {
         global $wpdb;
         $cnt = 0;
         $family = '';
+        $subfamily = '';
         $summary = '';
         foreach($items as $line) {
             $record = str_getcsv($line, ",", '"');
-            if (count($record) != 6) {
+            if (count($record) != 7) {
                 throw new Exception('invalid record at row ' . ($cnt + 2) . ': ' . $line);
             }
             if (empty($record[3])) {
                 throw new Exception('no uniprot at row ' . ($cnt + 2) . ' ' . $record[3]);
             }
             $family = empty($record[0]) ? $family : $record[0];
-            $summary = empty($record[1]) ? $summary : $record[1];
+            $subfamily = empty($record[1]) ? $subfamily : $record[1];
+            $summary = empty($record[2]) ? $summary : $record[2];
             $id = $wpdb->insert(
                 $this->table_name,
                 [
                     'family' => $family,
                     'summary' => $summary,
-                    'protein' => $record[2],
-                    'uniprot' => $record[3],
-                    'pdb' => $record[4],
-                    'gene' => $record[5]
+                    'subfamily' => $subfamily,
+                    'protein' => $record[3],
+                    'uniprot' => $record[4],
+                    'pdb' => $record[5],
+                    'gene' => $record[6]
                 ]
             );
             if ($id != false) {

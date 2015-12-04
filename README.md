@@ -6,14 +6,19 @@ Protein Information widget
 
 Place Protein Info Widget in sidebar.
 
+Create a page and give the name protein. This page will be custom render for protein list and protein detail.
+
     
 ## Management
     
 Protein data are store in CSV file in mbinfo-data bucket.
 
-Loading image meta data from GCS to wordpress
+To load protein information data
 
-
+    gsutil cp ./yourfile.csv gs://mbi-data/pinfo/pinfo.csv
+    
+Then load the file
+    
     wp mbinfo-pinfo load
 
 For detail, check out:
