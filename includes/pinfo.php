@@ -53,6 +53,12 @@ class MBInfoPInfo {
             }
             $s = 'family="' . $attr['family'] . '"';
         }
+        if (isset($attr['subfamily'])) {
+            if ($s) {
+                $s .= ' ';
+            }
+            $s = 'subfamily="' . $attr['subfamily'] . '"';
+        }
         return '<a ' . $s . '>' . $content . '</a>';
     }
 
