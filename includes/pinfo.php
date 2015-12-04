@@ -182,6 +182,13 @@ class MBInfoPInfo {
                     continue;
                 }
             }
+            $sf = $protein['subfamily'];
+            if (!empty($sf)) {
+                if (mb_stripos($content, 'subfamily="' . $sf . '"')) {
+                    array_push($list, $protein);
+                    continue;
+                }
+            }
         }
         return $list;
     }
@@ -197,7 +204,6 @@ class MBInfoPInfo {
         global $wpdb;
         $cnt = 0;
         $family = '';
-        $subfamily = '';
         $summary = '';
         foreach($items as $line) {
             $record = str_getcsv($line, ",", '"');
@@ -205,10 +211,10 @@ class MBInfoPInfo {
                 throw new Exception('invalid record at row ' . ($cnt + 2) . ': ' . $line);
             }
             if (empty($record[3])) {
-                throw new Exception('no uniprot at row ' . ($cnt + 2) . ' ' . $record[3]);
+                throw new Exception('no uniprot at row ' . ($cnt + 2) . ' ' . $line);
             }
             $family = empty($record[0]) ? $family : $record[0];
-            $subfamily = empty($record[1]) ? $subfamily : $record[1];
+            $subfamily = empty($record[1]) ? '' : $record[1];
             $summary = empty($record[2]) ? $summary : $record[2];
             $id = $wpdb->insert(
                 $this->table_name,

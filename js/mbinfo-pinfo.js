@@ -99,6 +99,16 @@ jQuery(function() {
         }
     };
 
+    var findBySubFamily = function(family) {
+        family = family.toLowerCase();
+        for (var i = 0; i < PInfoProtein.length; i++) {
+            var p = PInfoProtein[i];
+            if (!!p.subfamily && p.subfamily.toLowerCase() == family) {
+                return p;
+            }
+        }
+    };
+
     var dispUniprot = function(uniprot) {
         var p = findUniprot(uniprot);
         if (p) {
@@ -126,6 +136,15 @@ jQuery(function() {
         }
     };
 
+    var dispBySubFamily = function(family) {
+        var p = findBySubFamily(family);
+        if (p) {
+            dispProtein(p);
+        } else {
+            alert('Protein subfamily "' + (family || '') + '" not found.');
+        }
+    };
+
 
     var handleSelectionChanged = function(ev) {
         dispUniprot(ev.currentTarget.value);
@@ -147,6 +166,12 @@ jQuery(function() {
         ev.preventDefault();
         var href = ev.target.getAttribute('href');
         dispByFamily(href.substring(8, href.length - 1));
+    };
+
+    var handleSubFamilyClick = function(ev) {
+        ev.preventDefault();
+        var href = ev.target.getAttribute('href');
+        dispBySubFamily(href.substring(11, href.length - 1));
     };
 
     var ups = document.querySelectorAll('A[uniprot]');
@@ -187,6 +212,21 @@ jQuery(function() {
         a.onclick = handleFamilyClick;
         a.classList.add('protein');
         if (!findByFamily(family)) {
+            a.classList.add('not-found');
+        }
+    }
+
+    var subfamilys = document.querySelectorAll('A[subfamily]');
+    for (var i = 0; i < subfamilys.length; i++) {
+        var a = subfamilys[i];
+        if (a.hasAttribute('href')) {
+            continue;
+        }
+        var family = a.getAttribute('subfamily');
+        a.href = '/subfamily/' + family + '/';
+        a.onclick = handleSubFamilyClick;
+        a.classList.add('protein');
+        if (!findBySubFamily(family)) {
             a.classList.add('not-found');
         }
     }

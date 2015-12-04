@@ -35,7 +35,7 @@ function mbinfo_pinfo_enqueue_scripts() {
 	$js_url = plugins_url( 'js/mbinfo-pinfo.js', __FILE__ );
 	$sticky_js_url = plugins_url( 'js/jquery.sticky-kit.min.js', __FILE__ );
 	wp_enqueue_style( 'mbinfo-pinfo-css', $css_url, false, '0.2.0', 'screen' );
-	wp_enqueue_script( 'mbinfo-pinfo-js', $js_url, false, '0.1.0', 'screen' );
+	wp_enqueue_script( 'mbinfo-pinfo-js', $js_url, false, '0.1.3', 'screen' );
 	wp_enqueue_script( 'jquery.sticky-kit.min.js', $sticky_js_url, false, '1.0.0', 'screen' );
 }
 
