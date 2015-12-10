@@ -108,6 +108,8 @@ class MbinfoPInfoCliRunner extends WP_CLI_Command {
 				var_dump($proteins);
 				$cnt = count($proteins);
 				WP_CLI::line( "$cnt proteins found" );
+				$names = array_column($proteins, 'protein');
+				WP_CLI::line( implode(',', $names));
 				WP_CLI::success( "Done!" );
 			}
 		}

@@ -105,11 +105,12 @@ class MBInfoPInfo {
     }
 
     /**
+     * @param string $order default to protein
      * @return array
      */
-    function list_protein() {
+    function list_protein($order = 'protein') {
         global $wpdb;
-        return $wpdb->get_results("SELECT * FROM $this->table_name ORDER BY protein", ARRAY_A);
+        return $wpdb->get_results("SELECT * FROM $this->table_name ORDER BY $order", ARRAY_A);
     }
 
     private function search_proteins_by_name($content) {
@@ -226,8 +227,8 @@ class MBInfoPInfo {
                 $this->table_name,
                 [
                     'family' => $family,
-                    'summary' => $summary,
                     'subfamily' => $subfamily,
+                    'summary' => $summary,
                     'protein' => $record[3],
                     'uniprot' => $record[4],
                     'pdb' => $record[5],
