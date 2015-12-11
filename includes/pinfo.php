@@ -171,27 +171,27 @@ class MBInfoPInfo {
         $list = [];
         foreach ($proteins as $protein) {
             $uniprot = $protein['uniprot'];
-            if (mb_stripos($content, 'uniprot="' . $uniprot . '"')) {
+            if (stripos($content, 'uniprot="' . $uniprot . '"')) {
                 array_push($list, $protein);
                 continue;
             }
             $p = $protein['protein'];
             if (!empty($p)) {
-                if (mb_stripos($content, 'protein="' . $p . '"')) {
+                if (stripos($content, 'protein="' . $p . '"')) {
                     array_push($list, $protein);
                     continue;
                 }
             }
             $f = $protein['family'];
             if (!empty($f)) {
-                if (mb_stripos($content, 'family="' . $f . '"')) {
+                if (stripos($content, 'family="' . $f . '"')) {
                     array_push($list, $protein);
                     continue;
                 }
             }
             $sf = $protein['subfamily'];
             if (!empty($sf)) {
-                if (mb_stripos($content, 'subfamily="' . $sf . '"')) {
+                if (stripos($content, 'subfamily="' . $sf . '"')) {
                     array_push($list, $protein);
                     continue;
                 }
@@ -226,13 +226,13 @@ class MBInfoPInfo {
             $id = $wpdb->insert(
                 $this->table_name,
                 [
-                    'family' => $family,
-                    'subfamily' => $subfamily,
-                    'summary' => $summary,
-                    'protein' => $record[3],
-                    'uniprot' => $record[4],
-                    'pdb' => $record[5],
-                    'gene' => $record[6]
+                    'family' => trim($family),
+                    'subfamily' => trim($subfamily),
+                    'summary' => trim($summary),
+                    'protein' => trim($record[3]),
+                    'uniprot' => trim($record[4]),
+                    'pdb' => trim($record[5]),
+                    'gene' => trim($record[6])
                 ]
             );
             if ($id != false) {
